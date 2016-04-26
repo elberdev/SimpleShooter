@@ -23,6 +23,8 @@ var enemySpawnRate = 0.6
 
 var isAlive = true
 
+var score = 0
+
 class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
