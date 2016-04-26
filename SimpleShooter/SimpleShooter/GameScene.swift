@@ -25,6 +25,17 @@ var isAlive = true
 
 var score = 0
 
+// this will be used to handle collisions between objects
+struct physicsCategory {
+    
+    // the word static is to a stuct what the class keyword is in a class
+    // it creates a type-level variable or function, like the + in Objective-C.
+    static let player : UInt32 = 1
+    static let enemy : UInt32 = 2
+    static let projectile : UInt32 = 3
+    
+}
+
 // an SKScene is the root node of a tree of SKNodes
 // a scene must be presented from an SKView object (which in a way is like a
 // scenes controller)
@@ -70,6 +81,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnPlayer() {
         
+        // init player
+        player = SKSpriteNode(color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+        
+        // position it in the world
+        player?.position = CGPoint(x: CGRectGetMidX(self.frame), y: 200)
+        
+        // give it a physics body. We use a volume-based constructor which by default
+        // is affected by all the different types of physics forces. Maybe we should
+        // have used an edge-based constructor instead?
+        player?.physicsBody = SKPhysicsBody(rectangleOfSize: (player?.size)!)
+        
+        // so we have to make sure it is not affected by gravity and ignores all dynamic
+        // forces applied to it. I think dynamic being false also includes gravity so the
+        // gravity bit may be unnecessary.
+        player?.physicsBody?.affectedByGravity = false
+        player?.physicsBody?.dynamic = false
+        
+        // tell which physics group it belongs to
+        player?.physicsBody?.categoryBitMask = physicsCategory.player
+        
+        // tell which physics group it can collide with
+        player?.physicsBody?.contactTestBitMask = physicsCategory.enemy
+
+        
+        self.addChild(player!)
     }
     
     func spawnScoreLabel() {
@@ -97,6 +133,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func resetVariablesOnStart() {
+        
         isAlive = true
         score = 0
     }
