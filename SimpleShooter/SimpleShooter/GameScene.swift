@@ -25,21 +25,30 @@ var isAlive = true
 
 var score = 0
 
-class GameScene: SKScene {
+// an SKScene is the root node of a tree of SKNodes
+// a scene must be presented from an SKView object (which in a way is like a
+// scenes controller)
+
+// the SKPhysicsDelegate protocol allows ...
+
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    // called immediately after a scene is presented into view
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
 
     }
     
+    // Called when a touch begins
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-       /* Called when a touch begins */
-        
+
         for touch in touches {
 
         }
     }
    
+    // Called before each frame is rendered
     override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
+
     }
 }
