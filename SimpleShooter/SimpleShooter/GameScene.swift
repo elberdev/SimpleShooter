@@ -33,9 +33,23 @@ var score = 0
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    // called immediately after a scene is presented into view
+    // called immediately after a scene is presented into view. Good for initial
+    // setup
     override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
+        
+        // assign this scene as the delegate to handle physics events
+        physicsWorld.contactDelegate = self;
+        
+        self.backgroundColor = UIColor.purpleColor()
+        
+        spawnPlayer()
+        spawnScoreLabel()
+        spawnMainLabel()
+        fireProjectile()
+        randomEnemyTimerSpawn()
+        updateScore()
+        hideLabel()
+        resetVariablesOnStart()
 
     }
     
@@ -50,5 +64,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Called before each frame is rendered
     override func update(currentTime: CFTimeInterval) {
 
+    }
+    
+    /* CUSTOM SETUP FUNCTIONS */
+    
+    func spawnPlayer() {
+        
+    }
+    
+    func spawnScoreLabel() {
+        
+    }
+    
+    func spawnMainLabel() {
+        
+    }
+    
+    func fireProjectile() {
+        
+    }
+    
+    func randomEnemyTimerSpawn() {
+        
+    }
+    
+    func updateScore() {
+        
+    }
+    
+    func hideLabel() {
+        
+    }
+    
+    func resetVariablesOnStart() {
+        isAlive = true
+        score = 0
     }
 }
