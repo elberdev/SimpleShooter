@@ -58,6 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spawnPlayer()
         spawnScoreLabel()
         spawnMainLabel()
+        spawnProjectile()
         fireProjectile()
         randomEnemyTimerSpawn()
         updateScore()
@@ -128,6 +129,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         mainLabel?.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
         mainLabel?.text = "Start"
         self.addChild(mainLabel!)
+    }
+    
+    func spawnProjectile() {
+        
+        projectile = SKSpriteNode(color: UIColor.whiteColor(), size: CGSize(width: 20, height: 20))
+        projectile!.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
+        projectile?.physicsBody = SKPhysicsBody(rectangleOfSize: (projectile?.size)!)
+        projectile?.physicsBody?.affectedByGravity = false
+        projectile?.physicsBody?.categoryBitMask = physicsCategory.projectile
+        projectile?.physicsBody?.contactTestBitMask = physicsCategory.enemy
+        projectile?.physicsBody?.dynamic = false
+        
+        // this will keep the projectile from being positioned on top of the player
+        projectile?.zPosition = -1
+        
+        // this specific object needs to do stuff! So we program a couple of actions
+        let moveForward = SKAction.moveToY(800, duration: projectileSpeed)
+        let destroy = SKAction.removeFromParent()
+        
+        // then run the damn actions
+        projectile?.runAction(SKAction.sequence([moveForward, destroy]))
+        
+        addChild(projectile!)
     }
     
     func fireProjectile() {
