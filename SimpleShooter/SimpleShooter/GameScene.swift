@@ -122,6 +122,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnMainLabel() {
         
+        mainLabel = SKLabelNode(fontNamed: "Futura")
+        mainLabel?.fontSize = 100
+        mainLabel?.fontColor = textColorHUD
+        mainLabel?.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
+        mainLabel?.text = "Start"
+        self.addChild(mainLabel!)
     }
     
     func fireProjectile() {
