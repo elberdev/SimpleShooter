@@ -25,6 +25,9 @@ var isAlive = true
 
 var score = 0
 
+// an off-white
+var textColorHUD = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
+
 // this will be used to handle collisions between objects
 struct physicsCategory {
     
@@ -33,7 +36,6 @@ struct physicsCategory {
     static let player : UInt32 = 1
     static let enemy : UInt32 = 2
     static let projectile : UInt32 = 3
-    
 }
 
 // an SKScene is the root node of a tree of SKNodes
@@ -61,7 +63,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         updateScore()
         hideLabel()
         resetVariablesOnStart()
-
     }
     
     // Called when a touch begins
@@ -110,6 +111,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnScoreLabel() {
         
+        scoreLabel = SKLabelNode(fontNamed: "Futura")
+        scoreLabel?.fontSize = 50
+        scoreLabel?.fontColor = textColorHUD
+        scoreLabel?.position = CGPoint(x: CGRectGetMidX(self.frame), y: 50)
+        scoreLabel?.text = "Score"
+        
+        self.addChild(scoreLabel!)
     }
     
     func spawnMainLabel() {
