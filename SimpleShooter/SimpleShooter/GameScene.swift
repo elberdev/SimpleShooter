@@ -59,6 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spawnScoreLabel()
         spawnMainLabel()
         spawnProjectile()
+        spawnEnemy()
         fireProjectile()
         randomEnemyTimerSpawn()
         updateScore()
@@ -152,6 +153,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         projectile?.runAction(SKAction.sequence([moveForward, destroy]))
         
         addChild(projectile!)
+    }
+    
+    func spawnEnemy() {
+        
+        enemy = SKSpriteNode(color: UIColor.redColor(), size: CGSize(width: 80, height: 80))
+        enemy!.position = CGPoint(x: Int(arc4random_uniform(1000) + 300), y: 1000)
+        
+        enemy?.physicsBody = SKPhysicsBody(rectangleOfSize: enemy!.size)
+        enemy?.physicsBody?.affectedByGravity = false
+        enemy?.physicsBody?.categoryBitMask = physicsCategory.enemy
+        enemy?.physicsBody?.contactTestBitMask = physicsCategory.projectile
+        // this will eliminate rotation due to collision
+        enemy?.physicsBody?.allowsRotation = false
+        enemy?.physicsBody?.dynamic = true
+        
+        // there's a reason we make this a var here...
+        var moveForward = SKAction.moveToY(-100, duration: enemySpeed)
+        let destroy = SKAction.removeFromParent()
+        
+        enemy?.runAction(SKAction.sequence([moveForward, destroy]))
+        
+        self.addChild(enemy!)
     }
     
     func fireProjectile() {
