@@ -179,6 +179,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func fireProjectile() {
         
+        // a wait timer!
+        let fireProjectileTimer = SKAction.waitForDuration(fireProjectileRate)
+        
+        // an action!
+        let spawn = SKAction.runBlock {
+        
+            self.spawnProjectile()
+        }
+        
+        // put them together for an action sequence
+        let sequence = SKAction.sequence([fireProjectileTimer, spawn])
+        
+        // run the action sequence
+        self.runAction(SKAction.repeatActionForever(sequence))
     }
     
     func randomEnemyTimerSpawn() {
