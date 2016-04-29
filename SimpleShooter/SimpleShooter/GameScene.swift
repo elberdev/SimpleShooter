@@ -237,4 +237,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         isAlive = true
         score = 0
     }
+    
+    /* PHYSICS DELEGATE FUNCTIONS */
+    
+    func didBeginContact(contact: SKPhysicsContact) {
+        
+        let firstBody : SKPhysicsBody = contact.bodyA
+        let secondBody : SKPhysicsBody = contact.bodyB
+        
+        if ((firstBody.categoryBitMask == physicsCategory.projectile) &&
+            (secondBody.categoryBitMask == physicsCategory.enemy))
+            ||
+            ((firstBody.categoryBitMask == physicsCategory.enemy) &&
+            (secondBody.categoryBitMask == physicsCategory.projectile))
+        {
+            projectileCollision(firstBody.node as! SKSpriteNode,
+                                projectileTemp: secondBody.node as! SKSpriteNode)
+        }
+
+    }
+    
+    func projectileCollision(enemyTemp: SKSpriteNode, projectileTemp: SKSpriteNode) {
+        
+    }
 }
