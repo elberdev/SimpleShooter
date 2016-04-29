@@ -74,6 +74,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         }
     }
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        for touch in touches {
+            
+            let touchLocation = touch.locationInNode(self)
+            if isAlive {
+                
+                player?.position.x = touchLocation.x
+            }
+            
+            // we will move things, not destroy them
+            if !isAlive {
+                
+                player?.position.x = -200
+            }
+        }
+    }
    
     // Called before each frame is rendered
     override func update(currentTime: CFTimeInterval) {
@@ -197,6 +215,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func randomEnemyTimerSpawn() {
         
+        let spawnEnemyTimer = SKAction.waitForDuration(enemySpawnRate)
+        let spawn = SKAction.runBlock {
+            
+            self.spawnEnemy()
+        }
+        let sequence = SKAction.sequence([spawnEnemyTimer, spawn])
+        self.runAction(SKAction.repeatActionForever(sequence))
     }
     
     func updateScore() {
