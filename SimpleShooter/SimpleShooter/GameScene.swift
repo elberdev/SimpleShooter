@@ -226,10 +226,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func updateScore() {
         
+        scoreLabel!.text = "Score: \(score)"
     }
     
     func hideLabel() {
         
+        let wait = SKAction.waitForDuration(3.0);
+        let hide = SKAction.runBlock {
+            mainLabel?.alpha = 0.0
+        }
+        
+        let sequence = SKAction.sequence([wait, hide])
+        self.runAction(SKAction.repeatAction(sequence, count: 1))
     }
     
     func resetVariablesOnStart() {
@@ -238,26 +246,57 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         score = 0
     }
     
-    /* PHYSICS DELEGATE FUNCTIONS */
+    /* PHYSICS DELEGATE FUNCTION */
     
     func didBeginContact(contact: SKPhysicsContact) {
         
         let firstBody : SKPhysicsBody = contact.bodyA
         let secondBody : SKPhysicsBody = contact.bodyB
         
-        if ((firstBody.categoryBitMask == physicsCategory.projectile) &&
-            (secondBody.categoryBitMask == physicsCategory.enemy))
-            ||
-            ((firstBody.categoryBitMask == physicsCategory.enemy) &&
-            (secondBody.categoryBitMask == physicsCategory.projectile))
+        // projectile collides with enemy or vice-versa
+        if (firstBody.categoryBitMask == physicsCategory.projectile &&
+            secondBody.categoryBitMask == physicsCategory.enemy
+            ) || (
+            firstBody.categoryBitMask == physicsCategory.enemy &&
+            secondBody.categoryBitMask == physicsCategory.projectile)
         {
-            projectileCollision(firstBody.node as! SKSpriteNode,
-                                projectileTemp: secondBody.node as! SKSpriteNode)
+            projectileCollision()
+        }
+        
+        // enemy collides with player or vice-versa
+        if (firstBody.categoryBitMask == physicsCategory.player &&
+            secondBody.categoryBitMask == physicsCategory.enemy
+            ) || (
+            firstBody.categoryBitMask == physicsCategory.enemy &&
+            secondBody.categoryBitMask == physicsCategory.player)
+        {
+            enemyPlayerCollision()
         }
 
     }
     
-    func projectileCollision(enemyTemp: SKSpriteNode, projectileTemp: SKSpriteNode) {
+    /* CUSTOM FUNCTIONS */
+    
+    func waitThenMoveToTitleScreen() {
         
+    }
+    
+    func projectileCollision() {
+        
+        enemy?.removeFromParent()
+        projectile?.removeFromParent()
+        
+        score = score + 1
+        updateScore()
+    }
+    
+    func enemyPlayerCollision() {
+        
+        mainLabel?.fontSize = 50
+        mainLabel?.alpha = 1.0
+        mainLabel?.text = "Game Over"
+        
+        player?.removeFromParent()
+        isAlive = false
     }
 }
