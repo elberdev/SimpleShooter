@@ -103,10 +103,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func spawnPlayer() {
         
         // init player
-        player = SKSpriteNode(color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+        player = SKSpriteNode(color: UIColor.whiteColor(), size: CGSize(width: 40, height: 40))
         
         // position it in the world
-        player?.position = CGPoint(x: CGRectGetMidX(self.frame), y: 200)
+        player?.position = CGPoint(x: CGRectGetMidX(self.frame), y: 130)
         
         // give it a physics body. We use a volume-based constructor which by default
         // is affected by all the different types of physics forces. Maybe we should
@@ -116,7 +116,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // so we have to make sure it is not affected by gravity and ignores all dynamic
         // forces applied to it. I think dynamic being false also includes gravity so the
         // gravity bit may be unnecessary.
-        player?.physicsBody?.affectedByGravity = false
+        //player?.physicsBody?.affectedByGravity = false
         player?.physicsBody?.dynamic = false
         
         // tell which physics group it belongs to
@@ -124,7 +124,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // tell which physics group it can collide with
         player?.physicsBody?.contactTestBitMask = physicsCategory.enemy
-
         
         self.addChild(player!)
     }
@@ -152,13 +151,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnProjectile() {
         
-        projectile = SKSpriteNode(color: UIColor.whiteColor(), size: CGSize(width: 20, height: 20))
+        projectile = SKSpriteNode(color: UIColor.whiteColor(), size: CGSize(width: 15, height: 15))
         projectile!.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
         projectile?.physicsBody = SKPhysicsBody(rectangleOfSize: (projectile?.size)!)
         projectile?.physicsBody?.affectedByGravity = false
+        projectile?.physicsBody?.dynamic = false
         projectile?.physicsBody?.categoryBitMask = physicsCategory.projectile
         projectile?.physicsBody?.contactTestBitMask = physicsCategory.enemy
-        projectile?.physicsBody?.dynamic = false
         
         // this will keep the projectile from being positioned on top of the player
         projectile?.zPosition = -1
@@ -175,24 +174,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnEnemy() {
         
-        enemy = SKSpriteNode(color: UIColor.redColor(), size: CGSize(width: 80, height: 80))
+        enemy = SKSpriteNode(color: UIColor.redColor(), size: CGSize(width: 30, height: 30))
         enemy!.position = CGPoint(x: Int(arc4random_uniform(1000) + 300), y: 1000)
         
         enemy?.physicsBody = SKPhysicsBody(rectangleOfSize: enemy!.size)
         enemy?.physicsBody?.affectedByGravity = false
-        enemy?.physicsBody?.categoryBitMask = physicsCategory.enemy
-        enemy?.physicsBody?.contactTestBitMask = physicsCategory.projectile
         // this will eliminate rotation due to collision
         enemy?.physicsBody?.allowsRotation = false
         enemy?.physicsBody?.dynamic = true
+        enemy?.physicsBody?.categoryBitMask = physicsCategory.enemy
+        enemy?.physicsBody?.contactTestBitMask = physicsCategory.projectile
         
         // there's a reason we make this a var here...
-        var moveForward = SKAction.moveToY(-100, duration: enemySpeed)
+        let moveForward = SKAction.moveToY(-100, duration: enemySpeed)
         let destroy = SKAction.removeFromParent()
         
         enemy?.runAction(SKAction.sequence([moveForward, destroy]))
         
         self.addChild(enemy!)
+    }
+    
+    func spawnExplosion(enemyTemp: SKSpriteNode) {
+        
+        let explosionEmitterPath = NSBundle.mainBundle().pathForResource("Explosion", ofType: "sks")!
+        let explosion = NSKeyedUnarchiver.unarchiveObjectWithFile(explosionEmitterPath) as! SKEmitterNode
+        explosion.position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
+        explosion.zPosition = 1
+        explosion.targetNode = self
+        
+        self.addChild(explosion)
+        
+        let explosionTimerRemove = SKAction.waitForDuration(0.5)
+        let removeExplosion = SKAction.runBlock {
+            explosion.removeFromParent()
+        }
+        
+        self.runAction(SKAction.sequence([explosionTimerRemove, removeExplosion]))
     }
     
     func fireProjectile() {
@@ -260,7 +277,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstBody.categoryBitMask == physicsCategory.enemy &&
             secondBody.categoryBitMask == physicsCategory.projectile)
         {
-            projectileCollision()
+            spawnExplosion(firstBody.node as! SKSpriteNode)
+            projectileCollision(firstNode: firstBody.node as! SKSpriteNode, secondNode: secondBody.node as! SKSpriteNode)
         }
         
         // enemy collides with player or vice-versa
@@ -270,7 +288,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstBody.categoryBitMask == physicsCategory.enemy &&
             secondBody.categoryBitMask == physicsCategory.player)
         {
-            enemyPlayerCollision()
+            enemyPlayerCollision(firstNode: firstBody.node as! SKSpriteNode, secondNode: secondBody.node as! SKSpriteNode)
         }
 
     }
@@ -281,22 +299,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func projectileCollision() {
+    func projectileCollision(firstNode firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
         
-        enemy?.removeFromParent()
-        projectile?.removeFromParent()
+        firstNode.removeFromParent()
+        secondNode.removeFromParent()
         
         score = score + 1
         updateScore()
     }
     
-    func enemyPlayerCollision() {
+    func enemyPlayerCollision(firstNode firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
         
         mainLabel?.fontSize = 50
         mainLabel?.alpha = 1.0
         mainLabel?.text = "Game Over"
         
-        player?.removeFromParent()
+        firstNode.removeFromParent()
+        secondNode.removeFromParent()
         isAlive = false
     }
 }
