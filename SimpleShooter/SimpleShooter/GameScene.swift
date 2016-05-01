@@ -96,6 +96,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Called before each frame is rendered
     override func update(currentTime: CFTimeInterval) {
 
+        if !isAlive {
+            
+            player?.position.x = -200
+        }
     }
     
     /* CUSTOM SETUP FUNCTIONS */
@@ -186,10 +190,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemy?.physicsBody?.contactTestBitMask = physicsCategory.projectile
         
         // there's a reason we make this a var here...
-        let moveForward = SKAction.moveToY(-100, duration: enemySpeed)
+        var moveForward = SKAction.moveToY(-100, duration: enemySpeed)
         let destroy = SKAction.removeFromParent()
         
         enemy?.runAction(SKAction.sequence([moveForward, destroy]))
+        
+        if !isAlive {
+            moveForward = SKAction.moveToY(2000, duration: 1.0)
+        }
         
         self.addChild(enemy!)
     }
@@ -204,7 +212,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(explosion)
         
-        let explosionTimerRemove = SKAction.waitForDuration(0.5)
+        let explosionTimerRemove = SKAction.waitForDuration(0.25)
         let removeExplosion = SKAction.runBlock {
             explosion.removeFromParent()
         }
@@ -248,7 +256,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func hideLabel() {
         
-        let wait = SKAction.waitForDuration(3.0);
+        let wait = SKAction.waitForDuration(1.0);
         let hide = SKAction.runBlock {
             mainLabel?.alpha = 0.0
         }
@@ -297,6 +305,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func waitThenMoveToTitleScreen() {
         
+        let wait = SKAction.waitForDuration(3.0)
+        let transition = SKAction.runBlock {
+            self.view?.presentScene(TitleScene(), transition: SKTransition.fadeWithDuration(1.0))
+        }
+        
+        let sequence = SKAction.sequence([wait, transition])
+        self.runAction(SKAction.repeatAction(sequence, count: 1))
     }
     
     func projectileCollision(firstNode firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
@@ -317,5 +332,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         firstNode.removeFromParent()
         secondNode.removeFromParent()
         isAlive = false
+        
+        waitThenMoveToTitleScreen()
     }
 }

@@ -28,14 +28,14 @@ class TitleScene : SKScene {
         buttonPlay = UIButton(frame: CGRect(x: 100, y: 100, width: 400, height: 100))
         buttonPlay.center = CGPoint(x: view!.frame.size.width / 2, y: 600)
         buttonPlay.titleLabel?.font = UIFont(name: "Futura", size: 60)
-        buttonPlay.setTitle("Play!", forState: UIControlState.Normal)
+        buttonPlay.setTitle("Play", forState: UIControlState.Normal)
         buttonPlay.setTitleColor(textColorHUD, forState: UIControlState.Normal)
         buttonPlay.addTarget(self, action: #selector(TitleScene.playTheGame), forControlEvents: UIControlEvents.TouchUpInside)
         self.view?.addSubview(buttonPlay)
         
         gameTitle = UILabel(frame: CGRect(x: 0, y: 0, width: view!.frame.width, height: 300))
         gameTitle.textColor = textColorHUD
-        gameTitle.font = UIFont(name: "Futura", size: 60)
+        gameTitle.font = UIFont(name: "Futura", size: 40)
         gameTitle.textAlignment = NSTextAlignment.Center
         gameTitle.text = "BLOCK SHOOTER"
         self.view?.addSubview(gameTitle)
@@ -43,6 +43,19 @@ class TitleScene : SKScene {
     
     func playTheGame() {
         
+        self.view?.presentScene(GameScene(), transition: SKTransition.crossFadeWithDuration(1.0))
         
+        // cleanup
+        buttonPlay.removeFromSuperview()
+        gameTitle.removeFromSuperview()
+        
+        if let scene = GameScene(fileNamed: "GameScene") {
+            
+            let titleSceneView = self.view! as SKView
+            // this is an optimization line
+            titleSceneView.ignoresSiblingOrder = true
+            scene.scaleMode = .AspectFill
+            titleSceneView.presentScene(scene)
+        }
     }
 }
