@@ -16,6 +16,8 @@
 		3B0B0AB51CCF888C0069073E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B0B0AB31CCF888C0069073E /* LaunchScreen.storyboard */; };
 		3B0B0ABE1CD651F00069073E /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3B0B0ABC1CD651F00069073E /* Explosion.sks */; };
 		3B0B0ABF1CD651F00069073E /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B0B0ABD1CD651F00069073E /* spark.png */; };
+		3B0B0AC11CD657AC0069073E /* TitleScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B0AC01CD657AC0069073E /* TitleScene.swift */; };
+		3B0B0AC31CD657BB0069073E /* TitleScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3B0B0AC21CD657BB0069073E /* TitleScene.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		3B0B0AB61CCF888C0069073E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B0B0ABC1CD651F00069073E /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
 		3B0B0ABD1CD651F00069073E /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		3B0B0AC01CD657AC0069073E /* TitleScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleScene.swift; sourceTree = "<group>"; };
+		3B0B0AC21CD657BB0069073E /* TitleScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitleScene.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,12 +70,14 @@
 				3B0B0AA81CCF888C0069073E /* GameScene.sks */,
 				3B0B0AAA1CCF888C0069073E /* GameScene.swift */,
 				3B0B0AAC1CCF888C0069073E /* GameViewController.swift */,
+				3B0B0AC21CD657BB0069073E /* TitleScene.sks */,
+				3B0B0AC01CD657AC0069073E /* TitleScene.swift */,
+				3B0B0ABC1CD651F00069073E /* Explosion.sks */,
+				3B0B0ABD1CD651F00069073E /* spark.png */,
 				3B0B0AAE1CCF888C0069073E /* Main.storyboard */,
 				3B0B0AB11CCF888C0069073E /* Assets.xcassets */,
 				3B0B0AB31CCF888C0069073E /* LaunchScreen.storyboard */,
 				3B0B0AB61CCF888C0069073E /* Info.plist */,
-				3B0B0ABC1CD651F00069073E /* Explosion.sks */,
-				3B0B0ABD1CD651F00069073E /* spark.png */,
 			);
 			path = SimpleShooter;
 			sourceTree = "<group>";
@@ -140,6 +146,7 @@
 				3B0B0ABE1CD651F00069073E /* Explosion.sks in Resources */,
 				3B0B0AB21CCF888C0069073E /* Assets.xcassets in Resources */,
 				3B0B0AB01CCF888C0069073E /* Main.storyboard in Resources */,
+				3B0B0AC31CD657BB0069073E /* TitleScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +160,7 @@
 				3B0B0AAB1CCF888C0069073E /* GameScene.swift in Sources */,
 				3B0B0AAD1CCF888C0069073E /* GameViewController.swift in Sources */,
 				3B0B0AA71CCF888C0069073E /* AppDelegate.swift in Sources */,
+				3B0B0AC11CD657AC0069073E /* TitleScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
